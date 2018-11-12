@@ -11,7 +11,7 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class Test03_GroupingBy {
+public class Test06_GroupingBy {
 
     private List<String> alphabet =
             List.of("alfa", "bravo", "charlie", "delta", "echo",

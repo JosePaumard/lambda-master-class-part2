@@ -9,7 +9,7 @@ import java.util.Map;
 import static java.util.stream.Collectors.toMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class Test02_ToMap {
+public class Test05_ToMap {
 
     private List<String> alphabet = List.of("alfa", "bravo", "charlie", "delta");
 
@@ -30,7 +30,7 @@ public class Test02_ToMap {
             "To eat the world's due, by the grave and thee.");
 
     @Test
-    public void flatMap_1() {
+    public void toMap_1() {
 
         Map<String, String> result = alphabet.stream()
                 .collect(toMap(s -> s.substring(0, 1),
@@ -44,7 +44,7 @@ public class Test02_ToMap {
     }
 
     @Test
-    public void flatMap_2() {
+    public void toMap_2() {
 
         Map<String, String> result = alphabet.stream()
                 .collect(toMap(s -> s.substring(0, 1),
@@ -62,7 +62,7 @@ public class Test02_ToMap {
      */
     @Test
     @Ignore
-    public void flatMap_3() {
+    public void toMap_3() {
 
         Map<String, String> result = sonnet.stream()
                 .collect(toMap(word -> word.substring(0, 1),
@@ -70,7 +70,7 @@ public class Test02_ToMap {
     }
 
     @Test
-    public void flatMap_4() {
+    public void toMap_4() {
 
         Map<String, String> result = sonnet.stream()
                 .collect(
@@ -94,7 +94,7 @@ public class Test02_ToMap {
     }
 
     @Test
-    public void flatMap_5() {
+    public void toMap_5() {
 
         Map<String, String> result = sonnet.stream()
                 .collect(
@@ -124,34 +124,26 @@ public class Test02_ToMap {
      * For duplicate keys, concatenate the lines with a newline in between.
      */
     @Test
-    public void flatMap_6() {
+    public void toMap_6() {
 
-        Map<String, String> result = sonnet.stream()
-                .collect(
-                        toMap(
-                                line -> line.substring(0, 1),
-                                line -> line,
-                                (line1, line2) -> line1 + "\n" + line2 // TODO
-                        ));
+        Map<String, String> result = null; // TODO
 
         assertThat(result.size()).isEqualTo(8);
         assertThat(result).contains(
                 Map.entry("P", "Pity the world, or else this glutton be,"),
                 Map.entry("A", "And only herald to the gaudy spring,\n" +
-                               "And, tender churl, mak'st waste in niggarding:"),
+                        "And, tender churl, mak'st waste in niggarding:"),
                 Map.entry("B", "But as the riper should by time decease,\n" +
-                               "But thou contracted to thine own bright eyes,"),
+                        "But thou contracted to thine own bright eyes,"),
                 Map.entry("T", "That thereby beauty's rose might never die,\n" +
-                               "Thy self thy foe, to thy sweet self too cruel:\n" +
-                               "Thou that art now the world's fresh ornament,\n" +
-                               "To eat the world's due, by the grave and thee."),
+                        "Thy self thy foe, to thy sweet self too cruel:\n" +
+                        "Thou that art now the world's fresh ornament,\n" +
+                        "To eat the world's due, by the grave and thee."),
                 Map.entry("F", "From fairest creatures we desire increase,\n" +
-                               "Feed'st thy light's flame with self-substantial fuel,"),
+                        "Feed'st thy light's flame with self-substantial fuel,"),
                 Map.entry("W", "Within thine own bud buriest thy content,"),
                 Map.entry("H", "His tender heir might bear his memory:"),
                 Map.entry("M", "Making a famine where abundance lies,")
         );
     }
-
-
 }

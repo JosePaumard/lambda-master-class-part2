@@ -31,7 +31,7 @@ public class Test01_FlatMap {
 
     private List<String> expand(String s) {
         return s.codePoints()
-                .mapToObj(codePoint -> Character.toString((char) codePoint))
+                .mapToObj(codePoint -> Character.toString((char)codePoint))
                 .collect(toList());
     }
 
