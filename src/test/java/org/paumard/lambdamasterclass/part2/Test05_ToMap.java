@@ -126,7 +126,13 @@ public class Test05_ToMap {
     @Test
     public void toMap_6() {
 
-        Map<String, String> result = null; // TODO
+        Map<String, String> result = sonnet.stream()
+                .collect(
+                        toMap(
+                                line -> line.substring(0, 1),
+                                line -> line, // Function.identity()
+                                (line1, line2) -> line1 + "\n" + line2
+                        ));
 
         assertThat(result.size()).isEqualTo(8);
         assertThat(result).contains(

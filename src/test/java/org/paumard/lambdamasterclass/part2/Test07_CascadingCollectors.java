@@ -36,6 +36,12 @@ public class Test07_CascadingCollectors {
             "Pity the world, or else this glutton be,",
             "To eat the world's due, by the grave and thee.");
 
+    private List<String> expand(String s) {
+        return s.codePoints()
+                .mapToObj(codePoint -> Character.toString((char) codePoint))
+                .collect(toList());
+    }
+
     @Test
     public void cascadingCollectors_01() {
 
@@ -84,7 +90,20 @@ public class Test07_CascadingCollectors {
     @Test
     public void cascadingCollectors_03() {
 
-        Map<String, Set<String>> map = null; // TODO
+        var mapToFirstWordInASet =
+                Collectors.mapping(
+                        (String line) -> line.split(" +")[0],
+                        Collectors.toSet()
+                );
+        Map<String, Set<String>> map =
+//        Map<String, List<String>> map =
+                sonnet.stream()
+                        .collect(
+                                Collectors.groupingBy(
+                                        line -> line.substring(0, 1),
+                                        mapToFirstWordInASet
+                                )
+                        );
 
         assertThat(map.size()).isEqualTo(8);
         assertThat(map).containsExactly(
@@ -97,5 +116,22 @@ public class Test07_CascadingCollectors {
                 Map.entry("H", Set.of("His")),
                 Map.entry("M", Set.of("Making"))
         );
+    }
+
+    @Test
+    public void cascadingCollectors_04() {
+
+        Map<String, Long> map =
+                sonnet.stream() // stream of the lines of the sonnet
+                        .flatMap(line -> expand(line).stream()) // stream of letters
+                        .collect(
+                                Collectors.groupingBy(
+                                        letter -> letter,
+                                        Collectors.counting()
+                                )
+                        );
+
+        map.forEach((letter, count) -> System.out.println(letter + " => " + count));
+
     }
 }

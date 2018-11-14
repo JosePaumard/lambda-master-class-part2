@@ -5,8 +5,8 @@ import org.junit.Test;
 import java.util.List;
 import java.util.function.IntUnaryOperator;
 import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
 
+import static java.util.function.IntUnaryOperator.identity;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class Test04_FunctionCombination {
@@ -32,7 +32,8 @@ public class Test04_FunctionCombination {
         List<IntUnaryOperator> operators =
                 List.of(i -> i + 1, i -> i * 2, i -> i + 3);
 
-        IntUnaryOperator combinedOperator = null; // TODO
+        IntUnaryOperator combinedOperator =
+                operators.stream().reduce(identity(), IntUnaryOperator::andThen); // i -> i
 
         assertThat(combinedOperator.applyAsInt(5)).isEqualTo(15);
     }

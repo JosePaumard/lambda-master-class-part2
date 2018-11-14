@@ -2,8 +2,8 @@ package org.paumard.lambdamasterclass.part2;
 
 import org.junit.Test;
 
-import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,7 +31,7 @@ public class Test01_FlatMap {
 
     private List<String> expand(String s) {
         return s.codePoints()
-                .mapToObj(codePoint -> Character.toString((char)codePoint))
+                .mapToObj(codePoint -> Character.toString((char) codePoint))
                 .collect(toList());
     }
 
@@ -62,7 +62,11 @@ public class Test01_FlatMap {
     @Test
     public void flatMap_2() {
 
-        List<String> words = null; // TODO
+        Pattern pattern = Pattern.compile(" +");
+
+        List<String> words = sonnet.stream()
+                .flatMap(pattern::splitAsStream)
+                .collect(toList());
 
         assertThat(words.size()).isEqualTo(106);
         assertThat(words).contains("From", "fairest", "creatures", "we", "desire", "increase");

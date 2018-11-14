@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toMap;
@@ -82,7 +83,13 @@ public class Test06_GroupingBy {
     @Test
     public void groupingBy_3() {
 
-        Map<String, List<String>> result = null; // TODO
+        Map<String, List<String>> result =
+                sonnet.stream()
+                        .collect(
+                                Collectors.groupingBy(
+                                        line -> line.substring(0, 1)
+                                )
+                        );
 
 
         assertThat(result.size()).isEqualTo(8);

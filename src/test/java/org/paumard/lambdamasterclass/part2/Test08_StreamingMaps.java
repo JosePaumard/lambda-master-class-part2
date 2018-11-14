@@ -1,23 +1,11 @@
 package org.paumard.lambdamasterclass.part2;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.function.Function;
-import java.util.function.IntPredicate;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.zip.GZIPInputStream;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 public class Test08_StreamingMaps {
 
@@ -46,5 +34,45 @@ public class Test08_StreamingMaps {
 
         Pattern pattern = Pattern.compile(("[ ,':\\-]+"));
 
+        Map<String, Long> words =
+                sonnet.stream()
+                        .map(String::toLowerCase)
+                        .flatMap(pattern::splitAsStream)
+                        .collect(
+                                Collectors.collectingAndThen(
+                                        Collectors.groupingBy(
+                                                word -> word,
+                                                Collectors.counting()
+                                        ),
+                                        map -> Map.copyOf(map)
+                                )
+                        );
+
+        words.forEach((letter, count) -> System.out.println(letter + " => " + count));
+
+        Map.Entry<String, Long> mostFrequentWord =
+                words.entrySet().stream() // Stream<Map.Entry<String, Long>>
+                        .max(Map.Entry.comparingByValue())
+                        .orElseThrow();
+        System.out.println("mostFrequentWord = " + mostFrequentWord);
+
+//        Map<Long, List<Map.Entry<String, Long>>> otherWords =
+        Map<Long, List<String>> otherWords =
+        words.entrySet().stream() // Stream<Map.Entry<String, Long>>
+                .collect(
+                        Collectors.groupingBy(
+                                Map.Entry::getValue,
+                                Collectors.mapping(
+                                        Map.Entry::getKey,
+                                        Collectors.toList()
+                                )
+                        )
+                );
+
+        Map.Entry<Long, List<String>> mostSeenWords =
+        otherWords.entrySet().stream() // Stream<Map.Entry<Long, List<String>>>
+                .max(Map.Entry.comparingByKey())
+                .orElseThrow();
+        System.out.println("mostSeenWords = " + mostSeenWords);
     }
 }
