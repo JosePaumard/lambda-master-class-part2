@@ -4,7 +4,9 @@ import org.junit.Test;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class Test08_StreamingMaps {
@@ -58,21 +60,77 @@ public class Test08_StreamingMaps {
 
 //        Map<Long, List<Map.Entry<String, Long>>> otherWords =
         Map<Long, List<String>> otherWords =
-        words.entrySet().stream() // Stream<Map.Entry<String, Long>>
-                .collect(
-                        Collectors.groupingBy(
-                                Map.Entry::getValue,
-                                Collectors.mapping(
-                                        Map.Entry::getKey,
-                                        Collectors.toList()
+                words.entrySet().stream() // Stream<Map.Entry<String, Long>>
+                        .collect(
+                                Collectors.groupingBy(
+                                        Map.Entry::getValue,
+                                        Collectors.mapping(
+                                                Map.Entry::getKey,
+                                                Collectors.toList()
+                                        )
+                                )
+                        );
+
+        Map.Entry<Long, List<String>> mostSeenWords =
+                otherWords.entrySet().stream() // Stream<Map.Entry<Long, List<String>>>
+                        .max(Map.Entry.comparingByKey())
+                        .orElseThrow();
+        System.out.println("mostSeenWords = " + mostSeenWords);
+    }
+
+    @Test
+    public void streamingMaps_1b() {
+
+        Pattern pattern = Pattern.compile(("[ ,':\\-]+"));
+
+        Collector<String, ?, Map<String, Long>> collector =
+                Collectors.mapping(
+                        String::toLowerCase,
+                        Collectors.flatMapping(
+                                pattern::splitAsStream,
+                                Collectors.collectingAndThen(
+                                        Collectors.groupingBy(
+                                                word -> word,
+                                                Collectors.counting()
+                                        ),
+                                        Map::copyOf
                                 )
                         )
                 );
+        Map<String, Long> words =
+                sonnet.stream().collect(collector);
+
+        words.forEach((letter, count) -> System.out.println(letter + " => " + count));
+
+        Collector<Map.Entry<String, Long>, ?, Map.Entry<String, Long>> collector1 =
+                Collectors.collectingAndThen(
+                        Collectors.maxBy(
+                                Map.Entry.comparingByValue()
+                        ),
+                        Optional::orElseThrow
+                );
+
+        Map.Entry<String, Long> mostFrequentWord =
+                words.entrySet().stream().collect(collector1);
+        System.out.println("mostFrequentWord = " + mostFrequentWord);
+
+//        Map<Long, List<Map.Entry<String, Long>>> otherWords =
+        Map<Long, List<String>> otherWords =
+                words.entrySet().stream() // Stream<Map.Entry<String, Long>>
+                        .collect(
+                                Collectors.groupingBy(
+                                        Map.Entry::getValue,
+                                        Collectors.mapping(
+                                                Map.Entry::getKey,
+                                                Collectors.toList()
+                                        )
+                                )
+                        );
 
         Map.Entry<Long, List<String>> mostSeenWords =
-        otherWords.entrySet().stream() // Stream<Map.Entry<Long, List<String>>>
-                .max(Map.Entry.comparingByKey())
-                .orElseThrow();
+                otherWords.entrySet().stream() // Stream<Map.Entry<Long, List<String>>>
+                        .max(Map.Entry.comparingByKey())
+                        .orElseThrow();
         System.out.println("mostSeenWords = " + mostSeenWords);
     }
 }

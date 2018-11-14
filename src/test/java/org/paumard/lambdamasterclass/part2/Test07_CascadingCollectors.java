@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
@@ -132,6 +133,24 @@ public class Test07_CascadingCollectors {
                         );
 
         map.forEach((letter, count) -> System.out.println(letter + " => " + count));
+    }
 
+    @Test
+    public void cascadingCollectors_04b() {
+
+        Collector<String, ?, Map<String, Long>> collector =
+                Collectors.flatMapping(
+                        line -> expand(line).stream(),
+                        Collectors.groupingBy(
+                                letter -> letter,
+                                Collectors.counting()
+                        )
+                );
+
+        Map<String, Long> map =
+                sonnet.stream() // stream of the lines of the sonnet
+                        .collect(collector);
+
+        map.forEach((letter, count) -> System.out.println(letter + " => " + count));
     }
 }
