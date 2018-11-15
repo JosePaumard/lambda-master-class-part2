@@ -34,7 +34,7 @@ public class Test08_StreamingMaps {
     @Test
     public void streamingMaps_1() {
 
-        Pattern pattern = Pattern.compile(("[ ,':\\-]+"));
+        Pattern pattern = Pattern.compile(("[ ,':\\-\\.]+"));
 
         Map<String, Long> words =
                 sonnet.stream()
