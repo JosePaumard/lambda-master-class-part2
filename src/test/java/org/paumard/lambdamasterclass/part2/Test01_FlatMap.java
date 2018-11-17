@@ -36,7 +36,7 @@ public class Test01_FlatMap {
     }
 
     private String[] splitToWords(String line) {
-        return line.split(" +");
+        return line.split("[ ,:.]+");
     }
 
     @Test
