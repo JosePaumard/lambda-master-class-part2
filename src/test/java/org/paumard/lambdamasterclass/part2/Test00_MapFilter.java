@@ -1,10 +1,10 @@
 package org.paumard.lambdamasterclass.part2;
 
-import org.junit.Test;
-
 import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.LongStream;
+
+import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,8 +22,8 @@ public class Test00_MapFilter {
     public void mapFilter_1() {
 
         alphabet.stream()
-                .map(String::toUpperCase)
                 .filter(word -> word.length() == 6)
+                .map(String::toUpperCase)
                 .forEach(System.out::println);
     }
 
